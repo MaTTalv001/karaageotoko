@@ -1,7 +1,10 @@
 import Matter from 'matter-js';
+import { WORLD_GRAVITY } from '../constants/gameConfig';
 
 export const setupMatter = (element) => {
-  const engine = Matter.Engine.create();
+  const engine = Matter.Engine.create({
+    gravity: { x: 0, y: WORLD_GRAVITY }
+  });
   const world = engine.world;
 
   const render = Matter.Render.create({
@@ -18,11 +21,17 @@ export const setupMatter = (element) => {
   Matter.Runner.run(Matter.Runner.create(), engine);
   Matter.Render.run(render);
 
-  window.addEventListener('resize', () => {
-    render.canvas.width = window.innerWidth;
-    render.canvas.height = window.innerHeight;
-    Matter.Render.setPixelRatio(render, window.devicePixelRatio);
-  });
+  // リサイズハンドラーを関数として定義
+  const handleResize = () => {
+    if (render.canvas) {
+      render.canvas.width = window.innerWidth;
+      render.canvas.height = window.innerHeight;
+      Matter.Render.setPixelRatio(render, window.devicePixelRatio);
+    }
+  };
 
-  return { engine, render, world };
+  // リサイズイベントリスナーを追加
+  window.addEventListener('resize', handleResize);
+
+  return { engine, render, world, handleResize };
 };
