@@ -16,7 +16,13 @@ export const createBodies = (width, height) => {
     frictionAir: PLAYER_FRICTION_AIR,
     frictionStatic: PLAYER_FRICTION_STATIC,
     density: PLAYER_DENSITY,
-    render: { fillStyle: '#e74c3c' },
+    render: {
+      sprite: {
+        texture: '/img/karaage001.png',
+        xScale: 0.5,  // テクスチャのスケールを調整
+        yScale: 0.5
+      }
+    },
     label: 'player'
   });
 
