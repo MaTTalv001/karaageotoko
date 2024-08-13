@@ -9,7 +9,6 @@ import { setupEventListeners } from '../utils/eventHandlers';
 import { INITIAL_PLAYER_POSITION } from '../constants/gameConfig';
 import useRankings from '../hooks/useRankings';
 
-
 const GAME_WIDTH = 800; // ゲーム画面の幅を固定
 const GAME_HEIGHT = 600; // ゲーム画面の高さを固定
 
@@ -26,7 +25,10 @@ const Game = () => {
   const [showStatement, setShowStatement] = useState(false);
   const [gameState, setGameState] = useState('initial'); // 'initial', 'ready', 'playing', 'paused', 'finished'
   const [isInitialInteraction, setIsInitialInteraction] = useState(true);
-  const { rankings, loading, error } = useRankings();
+  const [playerName, setPlayerName] = useState('');
+  const [isRecordSubmitted, setIsRecordSubmitted] = useState(false);
+  const { rankings, loading, error, addRanking } = useRankings();
+  const audioRef = useRef(null);
 
   const handleTimeUpdate = useCallback((time) => {
   if (gameState === 'playing' && !goalAchieved) {
@@ -40,11 +42,34 @@ const Game = () => {
     }
   }, [error]);
 
+    useEffect(() => {
+    audioRef.current = new Audio('/bgm/muzik01.mp3');
+    audioRef.current.loop = true;
+    
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
   const handleGoalAchieved = useCallback(() => {
     setGoalAchieved(true);
     setIsTimerRunning(false);
     setGameState('finished');
+    setIsRecordSubmitted(false); // ゴール達成時にリセット
   }, []);
+
+  const handleAddRanking = useCallback(() => {
+    const timeInSeconds = Math.floor(clearTime / 1000);
+    const name = playerName.trim() || 'guest';
+    addRanking(name, 1, timeInSeconds);
+    setPlayerName(''); // 入力欄をクリア
+    setIsRecordSubmitted(true);
+  }, [clearTime, addRanking, playerName]);
+
 
   const handleStatementComplete = useCallback(() => {
     setShowStatement(false);
@@ -56,6 +81,7 @@ const Game = () => {
     setIsInitialInteraction(false);
     setShowStatement(true);
     setGameState('ready');
+    audioRef.current.play();
   }, []);
 
   useEffect(() => {
@@ -108,6 +134,7 @@ const Game = () => {
     setResetTimeStamp(Date.now());
     setShowStatement(true);
     setGameState('ready');
+    setIsRecordSubmitted(false);
   }, []);
 
   const formatTime = (ms) => {
@@ -186,6 +213,9 @@ const Game = () => {
             transform: 'translate(-50%, -50%)',
             textAlign: 'center',
             zIndex: 1001,
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            padding: '20px',
+            borderRadius: '10px'
           }}>
             <div style={{
               fontSize: '48px',
@@ -204,13 +234,49 @@ const Game = () => {
             }}>
               クリアタイム: {formatTime(clearTime)}
             </div>
-            <ResetButton
-              onClick={handleReset}
-              style={{
-                fontSize: '20px',
-                padding: '10px 20px'
-              }}
-            />
+            {!isRecordSubmitted && (
+              <input
+                type="text"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+                placeholder="プレイヤー名を入力"
+                style={{
+                  fontSize: '18px',
+                  padding: '5px 10px',
+                  marginBottom: '20px',
+                  width: '200px'
+                }}
+              />
+            )}
+            <div>
+              <ResetButton
+                onClick={handleReset}
+                style={{
+                  fontSize: '20px',
+                  padding: '10px 20px',
+                  marginRight: '10px'
+                }}
+              />
+              {!isRecordSubmitted ? (
+                <button
+                  onClick={handleAddRanking}
+                  style={{
+                    fontSize: '20px',
+                    padding: '10px 20px'
+                  }}
+                >
+                  レコード登録
+                </button>
+              ) : (
+                <div style={{
+                  fontSize: '20px',
+                  color: '#2ecc71',
+                  marginTop: '10px'
+                }}>
+                  レコードが登録されました！
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

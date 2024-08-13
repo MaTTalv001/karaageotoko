@@ -30,7 +30,22 @@ const useRankings = () => {
     }
   };
 
-  return { rankings, loading, error, fetchRankings };
+  const addRanking = async (name, stage, time) => {
+    try {
+      const { data, error } = await supabase
+        .from('rankings')
+        .insert([{ name, stage, time }]);
+
+      if (error) throw error;
+
+      console.log('Ranking added:', data);
+      await fetchRankings(); // ランキングを再取得して最新のデータを表示
+    } catch (error) {
+      console.error('Error adding ranking:', error);
+    }
+  };
+
+  return { rankings, loading, error, fetchRankings, addRanking};
 };
 
 export default useRankings;
