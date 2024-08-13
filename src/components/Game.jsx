@@ -7,6 +7,8 @@ import { setupMatter } from '../utils/matterSetup';
 import { createBodies } from '../utils/bodyCreation';
 import { setupEventListeners } from '../utils/eventHandlers';
 import { INITIAL_PLAYER_POSITION } from '../constants/gameConfig';
+import useRankings from '../hooks/useRankings';
+
 
 const GAME_WIDTH = 800; // ゲーム画面の幅を固定
 const GAME_HEIGHT = 600; // ゲーム画面の高さを固定
@@ -24,12 +26,19 @@ const Game = () => {
   const [showStatement, setShowStatement] = useState(false);
   const [gameState, setGameState] = useState('initial'); // 'initial', 'ready', 'playing', 'paused', 'finished'
   const [isInitialInteraction, setIsInitialInteraction] = useState(true);
+  const { rankings, loading, error } = useRankings();
 
   const handleTimeUpdate = useCallback((time) => {
   if (gameState === 'playing' && !goalAchieved) {
     setClearTime(time);
   }
-}, [gameState, goalAchieved]);
+  }, [gameState, goalAchieved]);
+  
+  useEffect(() => {
+    if (error) {
+      console.error('Error loading rankings:', error);
+    }
+  }, [error]);
 
   const handleGoalAchieved = useCallback(() => {
     setGoalAchieved(true);
