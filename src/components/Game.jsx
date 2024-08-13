@@ -26,10 +26,10 @@ const Game = () => {
   const [isInitialInteraction, setIsInitialInteraction] = useState(true);
 
   const handleTimeUpdate = useCallback((time) => {
-    if (gameState === 'playing' && !goalAchieved) {
-      setClearTime(time);
-    }
-  }, [gameState, goalAchieved]);
+  if (gameState === 'playing' && !goalAchieved) {
+    setClearTime(time);
+  }
+}, [gameState, goalAchieved]);
 
   const handleGoalAchieved = useCallback(() => {
     setGoalAchieved(true);

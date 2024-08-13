@@ -1,27 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const Timer = ({ isRunning, onTimeUpdate, resetTimeStamp }) => {
   const [time, setTime] = useState(0);
+  const timeRef = useRef(0);
 
   useEffect(() => {
     let interval;
     if (isRunning) {
       interval = setInterval(() => {
-        setTime((prevTime) => {
-          const newTime = prevTime + 10;
-          onTimeUpdate(newTime);
-          return newTime;
-        });
+        timeRef.current += 10;
+        setTime(timeRef.current);
       }, 10);
-    } else if (!isRunning) {
-      clearInterval(interval);
     }
     return () => clearInterval(interval);
-  }, [isRunning, onTimeUpdate]);
+  }, [isRunning]);
 
   useEffect(() => {
+    timeRef.current = 0;
     setTime(0);
   }, [resetTimeStamp]);
+
+  useEffect(() => {
+    onTimeUpdate(time);
+  }, [time, onTimeUpdate]);
 
   const formatTime = (ms) => {
     const minutes = Math.floor(ms / 60000);
