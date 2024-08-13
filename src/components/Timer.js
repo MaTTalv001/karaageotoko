@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Timer = ({ isRunning, onTimeUpdate, resetTime }) => {
+const Timer = ({ isRunning, onTimeUpdate, resetTimeStamp }) => {
   const [time, setTime] = useState(0);
 
   useEffect(() => {
@@ -20,10 +20,8 @@ const Timer = ({ isRunning, onTimeUpdate, resetTime }) => {
   }, [isRunning, onTimeUpdate]);
 
   useEffect(() => {
-    if (resetTime) {
-      setTime(0);
-    }
-  }, [resetTime]);
+    setTime(0);
+  }, [resetTimeStamp]);
 
   const formatTime = (ms) => {
     const minutes = Math.floor(ms / 60000);
