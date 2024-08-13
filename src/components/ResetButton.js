@@ -1,13 +1,13 @@
 import React from 'react';
 
-const ResetButton = ({ onClick }) => (
+const ResetButton = ({ onClick, style }) => (
   <button
     onClick={onClick}
     style={{
-      position: 'absolute',
-      top: '10px',
-      left: '10px',
-      zIndex: 1000,
+      padding: '5px 10px',
+      fontSize: '16px',
+      cursor: 'pointer',
+      ...style
     }}
   >
     リセット
