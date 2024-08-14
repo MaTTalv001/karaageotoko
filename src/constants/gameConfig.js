@@ -1,4 +1,4 @@
-export const INITIAL_PLAYER_POSITION = { x: 80, y: 480 };
+export const INITIAL_PLAYER_POSITION = { x: 100, y: 480 };
 export const JUMP_FORCE = 0.03;
 export const VELOCITY_THRESHOLD = 0.1; // この値以下の速度でのみジャンプ可能
 

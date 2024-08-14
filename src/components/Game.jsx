@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Matter from 'matter-js';
+import { useParams } from 'react-router-dom';
 import ResetButton from './ResetButton';
 import Timer from './Timer';
 import KaraageStatement from './KaraageStatement';
@@ -30,10 +31,22 @@ const Game = () => {
   const [isTextureLoaded, setIsTextureLoaded] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef(null);
+  const { stageId } = useParams();
+  const [bodyCreation, setBodyCreation] = useState(null);
 
   const { rankings, loading, error, addRanking } = useRankings();
 
   useEffect(() => {
+    const loadBodyCreation = async () => {
+      try {
+        const module = await import(`../utils/stage${stageId}BodyCreation.js`);
+        setBodyCreation(() => module.default);
+      } catch (error) {
+        console.error('Failed to load body creation module:', error);
+      }
+    };
+
+    loadBodyCreation();
     const loadTexture = () => {
       return new Promise((resolve, reject) => {
         const img = new Image();
@@ -58,7 +71,7 @@ const Game = () => {
         audioRef.current = null;
       }
     };
-  }, []);
+  }, [stageId]);
 
   const playAudio = useCallback(() => {
     if (audioRef.current && !isMuted) {
@@ -131,18 +144,19 @@ const Game = () => {
   }, [playAudio]);
 
   useEffect(() => {
-    if (!sceneRef.current || !isTextureLoaded) return;
+    if (!sceneRef.current || !isTextureLoaded || !bodyCreation) return;
 
     const { engine, render, world, handleResize } = setupMatter(sceneRef.current, GAME_WIDTH, GAME_HEIGHT);
     engineRef.current = engine;
     renderRef.current = render;
     resizeHandlerRef.current = handleResize;
 
-    const bodies = createBodies(GAME_WIDTH, GAME_HEIGHT);
+    const bodies = bodyCreation(GAME_WIDTH, GAME_HEIGHT);
     playerRef.current = bodies.player;
     Matter.World.add(world, Object.values(bodies));
 
     const cleanupEvents = setupEventListeners(sceneRef.current, render, bodies.player, engine, handleGoalAchieved);
+
 
     return () => {
       cleanupEvents();
@@ -163,7 +177,7 @@ const Game = () => {
         Matter.Engine.clear(engineRef.current);
       }
     };
-  }, [handleGoalAchieved, isTextureLoaded]);
+  }, [handleGoalAchieved, isTextureLoaded, bodyCreation]);
 
   const formatTime = (ms) => {
     const minutes = Math.floor(ms / 60000);
