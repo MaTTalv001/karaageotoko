@@ -1,10 +1,11 @@
 import Matter from 'matter-js';
 import { JUMP_FORCE, VELOCITY_THRESHOLD } from '../constants/gameConfig';
 
-export const setupEventListeners = (element, render, player, engine, setGoalAchieved) => {
+export const setupEventListeners = (element, render, player, engine, setGoalAchieved,gameActive) => {
   let jumpAngle = 0;
 
   const handleMouseMove = (event) => {
+    if (!gameActive) return;
     if (render.canvas) {
       const rect = render.canvas.getBoundingClientRect();
       const x = event.clientX - rect.left;
@@ -14,6 +15,7 @@ export const setupEventListeners = (element, render, player, engine, setGoalAchi
   };
 
   const handleClick = () => {
+    if (!gameActive) return;
     const velocity = Matter.Vector.magnitude(player.velocity);
     if (velocity < VELOCITY_THRESHOLD) {
       const force = Matter.Vector.create(

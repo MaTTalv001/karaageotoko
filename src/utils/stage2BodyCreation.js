@@ -10,7 +10,7 @@ import {
 } from '../constants/gameConfig';
 
 const createBodies = (width, height) => {
-  const player = Matter.Bodies.circle(50, height - 50, 20, { 
+  const player = Matter.Bodies.circle(100, height - 50, 20, { 
     restitution: PLAYER_RESTITUTION,
     friction: PLAYER_FRICTION,
     frictionAir: PLAYER_FRICTION_AIR,
@@ -33,28 +33,42 @@ const createBodies = (width, height) => {
     render: { fillStyle: 'silver' }
   });
 
-  const platform1 = Matter.Bodies.rectangle(width / 4, height * 0.7, width / 4, 20, {
+  const platform1 = Matter.Bodies.rectangle(width / 3.5, height * 0.85, width / 6, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const platform2 = Matter.Bodies.rectangle(width * 0.75, height * 0.5, width / 4, 20, {
+  const platform2 = Matter.Bodies.rectangle(width / 1.8, height * 0.75, width / 5, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const platform3 = Matter.Bodies.rectangle(width / 2, height * 0.3, width / 4, 20, {
+  const platform3 = Matter.Bodies.rectangle(width / 1, height * 0.65, width / 2, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const goal = Matter.Bodies.rectangle(width - 50, height * 0.9, 100, 50, {
+  const platform4 = Matter.Bodies.rectangle(width / 1.2, height * 0.5, width / 9, 20, {
+    isStatic: true,
+    friction: PLATFORM_FRICTION,
+    restitution: PLATFORM_RESTITUTION,
+    render: { fillStyle: 'white' }
+  });
+
+  const platform5 = Matter.Bodies.rectangle(width / 0.99, height * 0.58, width / 10, 100, {
+    isStatic: true,
+    friction: PLATFORM_FRICTION,
+    restitution: PLATFORM_RESTITUTION,
+    render: { fillStyle: 'white' }
+  });
+
+  const goal = Matter.Bodies.rectangle(width / 1.1, height * 0.59, 80, 50, {
     isStatic: true,
     isSensor: true,
     render: { fillStyle: 'black' },
@@ -69,7 +83,7 @@ const createBodies = (width, height) => {
     label: 'bouncingBall'
   });
 
-  return { player, ground, platform1, platform2, platform3, goal, bouncingBall };
+  return { player, ground, platform1, platform2, platform3, platform4, platform5, goal };
 };
 
 export default createBodies;

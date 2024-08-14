@@ -33,6 +33,7 @@ const Game = () => {
   const audioRef = useRef(null);
   const { stageId } = useParams();
   const [bodyCreation, setBodyCreation] = useState(null);
+  const [gameActive, setGameActive] = useState(false);
 
   const { rankings, loading, error, addRanking } = useRankings();
 
@@ -116,16 +117,20 @@ const Game = () => {
     setShowStatement(false);
     setIsTimerRunning(true);
     setGameState('playing');
+    setGameActive(true);
   }, []);
 
-  const handleAddRanking = useCallback(() => {
-    const timeInSeconds = Math.floor(clearTime / 1000);
-    const name = playerName.trim() || 'guest';
-    addRanking(name, 1, timeInSeconds);
-    setPlayerName('');
-    setIsRecordSubmitted(true);
-  }, [clearTime, addRanking, playerName]);
+useEffect(() => {
+  console.log('gameActive:', gameActive);
+}, [gameActive]);
 
+  const handleAddRanking = useCallback(() => {
+  const timeInSeconds = Math.floor(clearTime / 1000);
+  const name = playerName.trim() || 'guest';
+  addRanking(name, parseInt(stageId), timeInSeconds);
+  setPlayerName('');
+  setIsRecordSubmitted(true);
+}, [clearTime, addRanking, playerName, stageId]);
   const handleReset = useCallback(() => {
     if (!engineRef.current || !playerRef.current) return;
 
@@ -155,7 +160,7 @@ const Game = () => {
     playerRef.current = bodies.player;
     Matter.World.add(world, Object.values(bodies));
 
-    const cleanupEvents = setupEventListeners(sceneRef.current, render, bodies.player, engine, handleGoalAchieved);
+    const cleanupEvents = setupEventListeners(sceneRef.current, render, bodies.player, engine, handleGoalAchieved, gameActive);
 
 
     return () => {
@@ -177,7 +182,7 @@ const Game = () => {
         Matter.Engine.clear(engineRef.current);
       }
     };
-  }, [handleGoalAchieved, isTextureLoaded, bodyCreation]);
+  }, [handleGoalAchieved, isTextureLoaded, bodyCreation, gameActive]);
 
   const formatTime = (ms) => {
     const minutes = Math.floor(ms / 60000);

@@ -5,6 +5,7 @@ const StageSelect = () => {
   const stages = [
     { id: 1, name: 'ステージ 1' },
     { id: 2, name: 'ステージ 2' },
+    { id: 3, name: 'ステージ 3' },
   ];
 
   return (

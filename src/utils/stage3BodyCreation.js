@@ -10,7 +10,7 @@ import {
 } from '../constants/gameConfig';
 
 const createBodies = (width, height) => {
-  const player = Matter.Bodies.circle(100, height -20, 20, { 
+  const player = Matter.Bodies.circle(100, height - 50, 20, { 
     restitution: PLAYER_RESTITUTION,
     friction: PLAYER_FRICTION,
     frictionAir: PLAYER_FRICTION_AIR,
@@ -33,21 +33,21 @@ const createBodies = (width, height) => {
     render: { fillStyle: 'silver' }
   });
 
-  const platform1 = Matter.Bodies.rectangle(width / 3.5, height * 0.85, width / 6, 20, {
+  const platform1 = Matter.Bodies.rectangle(width / 4, height * 0.85, width / 10, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const platform2 = Matter.Bodies.rectangle(width / 1.8, height * 0.75, width / 5, 20, {
+  const platform2 = Matter.Bodies.rectangle(width / 2.2, height * 0.75, width / 7, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const platform3 = Matter.Bodies.rectangle(width / 1, height * 0.65, width / 2, 20, {
+  const platform3 = Matter.Bodies.rectangle(width / 1.5, height * 0.6, width / 9, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
@@ -61,14 +61,14 @@ const createBodies = (width, height) => {
     render: { fillStyle: 'white' }
   });
 
-  const platform5 = Matter.Bodies.rectangle(width / 0.99, height * 0.58, width / 10, 100, {
+  const platform5 = Matter.Bodies.rectangle(width / 1.7, height * 0.4, width / 5, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const goal = Matter.Bodies.rectangle(width / 1.1, height * 0.59, 80, 50, {
+  const goal = Matter.Bodies.rectangle(width / 4, height * 0.45, 80, 50, {
     isStatic: true,
     isSensor: true,
     render: { fillStyle: 'black' },
