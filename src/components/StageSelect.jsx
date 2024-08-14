@@ -7,10 +7,19 @@ const StageSelect = () => {
   const { stageRecords, loading, error } = useRankings();
 
   const stages = [
-    { id: 1, name: 'Stage1:胎動', image: '/img/stage01.png' },
-    { id: 2, name: 'Stage2:残響', image: '/img/stage02.png' },
-    { id: 3, name: 'Stage3:輪廻', image: '/img/stage03.png' },
-  ];
+  { id: 1, name: 'Stage1:胎動', image: '/img/stage01.jpg' },
+  { id: 2, name: 'Stage2:邂逅', image: '/img/stage02.jpg' },
+  { id: 3, name: 'Stage3:混沌', image: '/img/stage03.jpg' },
+  { id: 4, name: 'Stage4:疾風', image: '/img/stage04.jpg' },
+  { id: 5, name: 'Stage5:残響', image: '/img/stage05.jpg' },
+  { id: 6, name: 'Stage6:断罪', image: '/img/stage06.jpg' },
+  { id: 7, name: 'Stage7:覚醒', image: '/img/stage07.jpg' },
+  { id: 8, name: 'Stage8:激闘', image: '/img/stage08.jpg' },
+  { id: 9, name: 'Stage9:暗影', image: '/img/stage09.jpg' },
+  { id: 10, name: 'Stage10:決意', image: '/img/stage10.jpg' },
+  { id: 11, name: 'Stage11:光芒', image: '/img/stage11.jpg' },
+  { id: 12, name: 'Stage12:輪廻', image: '/img/stage12.jpg' },
+];
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
