@@ -2,26 +2,33 @@ import { useState, useEffect } from 'react';
 import supabase from '../services/supabaseClient';
 
 const useRankings = () => {
-  const [rankings, setRankings] = useState([]);
+  const [stageRecords, setStageRecords] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchRankings();
+    fetchStageRecords();
   }, []);
 
-  const fetchRankings = async () => {
+  const fetchStageRecords = async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
         .from('rankings')
-        .select('*')
+        .select('stage, name, time')
         .order('time', { ascending: true });
 
       if (error) throw error;
 
-      setRankings(data);
-      console.log('Fetched rankings:', data);
+      const records = data.reduce((acc, record) => {
+        if (!acc[record.stage] || record.time < acc[record.stage].time) {
+          acc[record.stage] = { name: record.name, time: record.time };
+        }
+        return acc;
+      }, {});
+
+      setStageRecords(records);
+      console.log('Fetched stage records:', records);
     } catch (error) {
       setError('Failed to fetch rankings');
       console.error('Error fetching rankings:', error);
@@ -39,13 +46,13 @@ const useRankings = () => {
       if (error) throw error;
 
       console.log('Ranking added:', data);
-      await fetchRankings(); // ランキングを再取得して最新のデータを表示
+      await fetchStageRecords(); // 新しいランキングを追加した後、記録を再取得
     } catch (error) {
       console.error('Error adding ranking:', error);
     }
   };
 
-  return { rankings, loading, error, fetchRankings, addRanking};
+  return { stageRecords, loading, error, addRanking };
 };
 
 export default useRankings;
