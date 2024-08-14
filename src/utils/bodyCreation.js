@@ -30,34 +30,34 @@ export const createBodies = (width, height) => {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
-    render: { fillStyle: '#2ecc71' }
+    render: { fillStyle: 'silver' }
   });
 
   const platform1 = Matter.Bodies.rectangle(width / 4, height * 0.7, width / 4, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
-    render: { fillStyle: '#3498db' }
+    render: { fillStyle: 'white' }
   });
 
   const platform2 = Matter.Bodies.rectangle(width * 0.75, height * 0.5, width / 4, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
-    render: { fillStyle: '#3498db' }
+    render: { fillStyle: 'white' }
   });
 
   const platform3 = Matter.Bodies.rectangle(width / 2, height * 0.3, width / 4, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
-    render: { fillStyle: '#3498db' }
+    render: { fillStyle: 'white' }
   });
 
-  const goal = Matter.Bodies.rectangle(width - 50, height * 0.9, 100, 20, {
+  const goal = Matter.Bodies.rectangle(width - 50, height * 0.9, 100, 50, {
     isStatic: true,
     isSensor: true,
-    render: { fillStyle: '#f1c40f' },
+    render: { fillStyle: 'black' },
     label: 'goal'
   });
 
@@ -65,7 +65,7 @@ export const createBodies = (width, height) => {
     restitution: 1,
     friction: 0.001,
     frictionAir: 0.001,
-    render: { fillStyle: '#9b59b6' },
+    render: { fillStyle: 'orange' },
     label: 'bouncingBall'
   });
 

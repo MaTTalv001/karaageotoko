@@ -184,9 +184,18 @@ const Game = () => {
         position: 'relative',
         width: `${GAME_WIDTH}px`,
         height: `${GAME_HEIGHT}px`,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        backgroundImage: 'url("/img/karaage_bg.jpg")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
       }}>
-        <div ref={sceneRef} style={{ width: '100%', height: '100%' }} />
+        <div ref={sceneRef} style={{ 
+          width: '100%', 
+          height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0
+        }} />
         <Timer
           isRunning={isTimerRunning}
           onTimeUpdate={handleTimeUpdate}

@@ -14,7 +14,7 @@ export const setupMatter = (element, width, height) => {
       width: width,
       height: height,
       wireframes: false,
-      background: '#87CEEB'
+      background: 'transparent'
     }
   });
 
