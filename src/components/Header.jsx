@@ -3,8 +3,8 @@ import { memo } from "react";
 
 export const Header = memo(() => {
   return (
-    <header className="navbar bg-base-300 relative z-50">
-      <div className="navbar-center flex-1 justify-center">
+    <header className="navbar bg-primary relative z-50">
+      <div className="navbar-center text-base-100 flex-1 justify-center">
         <Link to="/" className="btn btn-ghost normal-case text-xl md:text-2xl">
           からあげ様は揚げられたい
         </Link>

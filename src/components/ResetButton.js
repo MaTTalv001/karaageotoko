@@ -1,16 +1,11 @@
 import React from 'react';
 
-const ResetButton = ({ onClick, style }) => (
+const ResetButton = ({ onClick, className, children }) => (
   <button
     onClick={onClick}
-    style={{
-      padding: '5px 10px',
-      fontSize: '16px',
-      cursor: 'pointer',
-      ...style
-    }}
+    className={`btn  ${className}`}
   >
-    リセット
+    {children || '🔄 Reset'}
   </button>
 );
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Matter from 'matter-js';
+import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import ResetButton from './ResetButton';
 import Timer from './Timer';
@@ -208,150 +209,90 @@ useEffect(() => {
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}>
-        <div ref={sceneRef} style={{ 
-          width: '100%', 
-          height: '100%',
-          position: 'absolute',
-          top: 0,
-          left: 0
-        }} />
-        <Timer
-          isRunning={isTimerRunning}
-          onTimeUpdate={handleTimeUpdate}
-          resetTimeStamp={resetTimeStamp}
-          style={{
-            position: 'absolute',
-            top: '10px',
-            right: '10px',
-            zIndex: 1000,
-          }}
-        />
-        <button
-          onClick={toggleMute}
-          style={{
-            position: 'absolute',
-            top: '10px',
-            left: '10px',
-            zIndex: 1000,
-            padding: '5px 10px',
-            fontSize: '18px',
-            cursor: 'pointer',
-            // background: 'none',
-            // border: 'none',
-          }}
-        >
-          {isMuted ? '🔇Silent' : '🔊 BGM'}
-        </button>
-        <ResetButton
-          onClick={handleReset}
-          style={{
-            position: 'absolute',
-            top: '50px',
-            left: '10px',
-            zIndex: 1000,
-          }}
-        />
+        <div ref={sceneRef} className="absolute inset-0" />
+  <Timer
+    isRunning={isTimerRunning}
+    onTimeUpdate={handleTimeUpdate}
+    resetTimeStamp={resetTimeStamp}
+    className="absolute top-2 right-2 z-50"
+  />
+  <div className="absolute top-2 left-2 z-50 flex flex-col gap-2">
+    <button
+      onClick={toggleMute}
+      className="btn btn-sm "
+    >
+      {isMuted ? '🔇 Silent' : '🔊 BGM'}
+    </button>
+    <ResetButton
+      onClick={handleReset}
+      className="btn btn-sm "
+    >
+      🔄 リトライ
+    </ResetButton>
+  </div>
+        
         
         {isInitialInteraction && (
-          <div style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            textAlign: 'center',
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            padding: '20px',
-            borderRadius: '10px',
-            zIndex: 1001,
-          }}>
-            <h2 style={{ color: 'white' }}>唐揚げの壺</h2>
-            <button
-              onClick={handleInitialInteraction}
-              style={{
-                fontSize: '20px',
-                padding: '10px 20px',
-                cursor: 'pointer'
-              }}
-            >
-              ゲームを始める
-            </button>
-          </div>
-        )}
+  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70">
+    <div className="bg-base-200 p-8 rounded-lg shadow-xl text-center">
+      <p className="mb-6 text-base-content">
+                マウスで方向を決めクリックしてジャンプ!<br />
+                フライヤーを目指しましょう!
+      </p>
+      <button
+        onClick={handleInitialInteraction}
+        className="btn btn-primary btn-lg animate-pulse"
+      >
+        Fry!
+      </button>
+    </div>
+  </div>
+)}
         {showStatement && <KaraageStatement onComplete={handleStatementComplete} />}
         {goalAchieved && (
-          <div style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            textAlign: 'center',
-            zIndex: 1001,
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            padding: '20px',
-            borderRadius: '10px'
-          }}>
-            <div style={{
-              fontSize: '48px',
-              fontWeight: 'bold',
-              color: '#f1c40f',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
-              marginBottom: '20px'
-            }}>
-              ゴール！
-            </div>
-            <div style={{
-              fontSize: '24px',
-              color: '#fff',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
-              marginBottom: '20px'
-            }}>
-              クリアタイム: {formatTime(clearTime)}
-            </div>
-            {!isRecordSubmitted && (
-              <input
-                type="text"
-                value={playerName}
-                onChange={(e) => setPlayerName(e.target.value)}
-                placeholder="プレイヤー名を入力"
-                style={{
-                  fontSize: '18px',
-                  padding: '5px 10px',
-                  marginBottom: '20px',
-                  width: '200px'
-                }}
-              />
-            )}
-            <div>
-              <ResetButton
-                onClick={handleReset}
-                style={{
-                  fontSize: '20px',
-                  padding: '10px 20px',
-                  marginRight: '10px'
-                }}
-              />
-              {!isRecordSubmitted ? (
-                <button
-                  onClick={handleAddRanking}
-                  style={{
-                    fontSize: '20px',
-                    padding: '10px 20px'
-                  }}
-                >
-                  レコード登録
-                </button>
-              ) : (
-                <div style={{
-                  fontSize: '20px',
-                  color: '#2ecc71',
-                  marginTop: '10px'
-                }}>
-                  レコードが登録されました！
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+    <div className="bg-base-200 p-8 rounded-lg shadow-xl max-w-md w-full text-center">
+  <h2 className="text-5xl font-bold text-primary mb-6">ゴール！</h2>
+  <p className="text-2xl mb-6">
+    クリアタイム: <span className="font-bold">{formatTime(clearTime)}</span>
+  </p>
+  {!isRecordSubmitted && (
+    <input
+      type="text"
+      value={playerName}
+      onChange={(e) => setPlayerName(e.target.value)}
+      placeholder="プレイヤー名を入力"
+      className="input input-bordered w-full max-w-xs mb-4"
+    />
+  )}
+  <div className="mb-6">
+    {!isRecordSubmitted ? (
+      <button
+        onClick={handleAddRanking}
+        className="btn btn-primary w-full"
+      >
+        レコード登録
+      </button>
+    ) : (
+      <div className="text-success text-xl">
+        レコードが登録されました！
+      </div>
+    )}
+  </div>
+  <div className="flex justify-center gap-4">
+    <ResetButton
+      onClick={handleReset}
+      className="btn btn-secondary"
+    >
+      リトライ
+    </ResetButton>
+    <Link to="/" className="btn btn-accent">
+      ステージ選択
+    </Link>
+  </div>
+</div>
+  </div>
+)}
       </div>
     </div>
   );

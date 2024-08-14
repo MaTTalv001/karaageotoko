@@ -21,7 +21,7 @@ const StageSelect = () => {
   
 
   return (
-    <div className="min-h-screen bg-base-200 flex flex-col items-center">
+    <div className="min-h-screen bg-base-100 flex flex-col items-center">
       <div className="hero min-h-[40vh] bg-base-200 relative" style={{backgroundImage: 'url(/img/karaage_title.jpg)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
     <div className="hero-overlay bg-opacity-60"></div>
     <div className="hero-content text-center text-neutral-content z-10">
