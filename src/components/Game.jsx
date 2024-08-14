@@ -9,8 +9,8 @@ import { setupEventListeners } from '../utils/eventHandlers';
 import { INITIAL_PLAYER_POSITION } from '../constants/gameConfig';
 import useRankings from '../hooks/useRankings';
 
-const GAME_WIDTH = 800; // ゲーム画面の幅を固定
-const GAME_HEIGHT = 600; // ゲーム画面の高さを固定
+const GAME_WIDTH = 800;
+const GAME_HEIGHT = 600;
 
 const Game = () => {
   const sceneRef = useRef(null);
@@ -23,26 +23,31 @@ const Game = () => {
   const [clearTime, setClearTime] = useState(0);
   const [resetTimeStamp, setResetTimeStamp] = useState(Date.now());
   const [showStatement, setShowStatement] = useState(false);
-  const [gameState, setGameState] = useState('initial'); // 'initial', 'ready', 'playing', 'paused', 'finished'
+  const [gameState, setGameState] = useState('initial');
   const [isInitialInteraction, setIsInitialInteraction] = useState(true);
   const [playerName, setPlayerName] = useState('');
   const [isRecordSubmitted, setIsRecordSubmitted] = useState(false);
-  const { rankings, loading, error, addRanking } = useRankings();
+  const [isTextureLoaded, setIsTextureLoaded] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef(null);
 
-  const handleTimeUpdate = useCallback((time) => {
-  if (gameState === 'playing' && !goalAchieved) {
-    setClearTime(time);
-  }
-  }, [gameState, goalAchieved]);
-  
-  useEffect(() => {
-    if (error) {
-      console.error('Error loading rankings:', error);
-    }
-  }, [error]);
+  const { rankings, loading, error, addRanking } = useRankings();
 
-    useEffect(() => {
+  useEffect(() => {
+    const loadTexture = () => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          setIsTextureLoaded(true);
+          resolve();
+        };
+        img.onerror = reject;
+        img.src = '/img/karaage001.png';
+      });
+    };
+
+    loadTexture().catch(console.error);
+
     audioRef.current = new Audio('/bgm/muzik01.mp3');
     audioRef.current.loop = true;
     
@@ -55,21 +60,44 @@ const Game = () => {
     };
   }, []);
 
+  const playAudio = useCallback(() => {
+    if (audioRef.current && !isMuted) {
+      audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+    }
+  }, [isMuted]);
+
+  const pauseAudio = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+  }, []);
+
+  const toggleMute = useCallback(() => {
+    setIsMuted(prev => !prev);
+    if (audioRef.current) {
+      audioRef.current.muted = !isMuted;
+    }
+  }, [isMuted]);
+
+  const handleTimeUpdate = useCallback((time) => {
+    if (gameState === 'playing' && !goalAchieved) {
+      setClearTime(time);
+    }
+  }, [gameState, goalAchieved]);
+
   const handleGoalAchieved = useCallback(() => {
     setGoalAchieved(true);
     setIsTimerRunning(false);
     setGameState('finished');
-    setIsRecordSubmitted(false); // ゴール達成時にリセット
+    setIsRecordSubmitted(false);
   }, []);
 
-  const handleAddRanking = useCallback(() => {
-    const timeInSeconds = Math.floor(clearTime / 1000);
-    const name = playerName.trim() || 'guest';
-    addRanking(name, 1, timeInSeconds);
-    setPlayerName(''); // 入力欄をクリア
-    setIsRecordSubmitted(true);
-  }, [clearTime, addRanking, playerName]);
-
+  const handleInitialInteraction = useCallback(() => {
+    setIsInitialInteraction(false);
+    setShowStatement(true);
+    setGameState('ready');
+    playAudio();
+  }, [playAudio]);
 
   const handleStatementComplete = useCallback(() => {
     setShowStatement(false);
@@ -77,15 +105,33 @@ const Game = () => {
     setGameState('playing');
   }, []);
 
-  const handleInitialInteraction = useCallback(() => {
-    setIsInitialInteraction(false);
+  const handleAddRanking = useCallback(() => {
+    const timeInSeconds = Math.floor(clearTime / 1000);
+    const name = playerName.trim() || 'guest';
+    addRanking(name, 1, timeInSeconds);
+    setPlayerName('');
+    setIsRecordSubmitted(true);
+  }, [clearTime, addRanking, playerName]);
+
+  const handleReset = useCallback(() => {
+    if (!engineRef.current || !playerRef.current) return;
+
+    const { Body } = Matter;
+    Body.setPosition(playerRef.current, INITIAL_PLAYER_POSITION);
+    Body.setVelocity(playerRef.current, { x: 0, y: 0 });
+    Body.setAngularVelocity(playerRef.current, 0);
+    setGoalAchieved(false);
+    setIsTimerRunning(false);
+    setClearTime(0);
+    setResetTimeStamp(Date.now());
     setShowStatement(true);
     setGameState('ready');
-    audioRef.current.play();
-  }, []);
+    setIsRecordSubmitted(false);
+    playAudio();
+  }, [playAudio]);
 
   useEffect(() => {
-    if (!sceneRef.current) return;
+    if (!sceneRef.current || !isTextureLoaded) return;
 
     const { engine, render, world, handleResize } = setupMatter(sceneRef.current, GAME_WIDTH, GAME_HEIGHT);
     engineRef.current = engine;
@@ -97,8 +143,6 @@ const Game = () => {
     Matter.World.add(world, Object.values(bodies));
 
     const cleanupEvents = setupEventListeners(sceneRef.current, render, bodies.player, engine, handleGoalAchieved);
-
-    // バウンシングボールの処理（前回のコードと同じ）
 
     return () => {
       cleanupEvents();
@@ -119,23 +163,7 @@ const Game = () => {
         Matter.Engine.clear(engineRef.current);
       }
     };
-  }, [handleGoalAchieved]);
-
-  const handleReset = useCallback(() => {
-    if (!engineRef.current || !playerRef.current) return;
-
-    const { Body } = Matter;
-    Body.setPosition(playerRef.current, INITIAL_PLAYER_POSITION);
-    Body.setVelocity(playerRef.current, { x: 0, y: 0 });
-    Body.setAngularVelocity(playerRef.current, 0);
-    setGoalAchieved(false);
-    setIsTimerRunning(false);
-    setClearTime(0);
-    setResetTimeStamp(Date.now());
-    setShowStatement(true);
-    setGameState('ready');
-    setIsRecordSubmitted(false);
-  }, []);
+  }, [handleGoalAchieved, isTextureLoaded]);
 
   const formatTime = (ms) => {
     const minutes = Math.floor(ms / 60000);
@@ -170,15 +198,32 @@ const Game = () => {
             zIndex: 1000,
           }}
         />
-        <ResetButton
-          onClick={handleReset}
+        <button
+          onClick={toggleMute}
           style={{
             position: 'absolute',
             top: '10px',
             left: '10px',
             zIndex: 1000,
+            padding: '5px 10px',
+            fontSize: '18px',
+            cursor: 'pointer',
+            // background: 'none',
+            // border: 'none',
+          }}
+        >
+          {isMuted ? '🔇Silent' : '🔊 BGM'}
+        </button>
+        <ResetButton
+          onClick={handleReset}
+          style={{
+            position: 'absolute',
+            top: '50px',
+            left: '10px',
+            zIndex: 1000,
           }}
         />
+        
         {isInitialInteraction && (
           <div style={{
             position: 'absolute',

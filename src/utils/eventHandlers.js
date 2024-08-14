@@ -60,11 +60,11 @@ export const setupEventListeners = (element, render, player, engine, setGoalAchi
 
       ctx.font = '16px Arial';
       ctx.fillStyle = 'black';
-      ctx.fillText(`Angle: ${Math.round(jumpAngle * 180 / Math.PI)}°`, 10, 25);
+      //ctx.fillText(`Angle: ${Math.round(jumpAngle * 180 / Math.PI)}°`, 10, 25);
       
       const velocity = Matter.Vector.magnitude(player.velocity);
-      ctx.fillText(`Velocity: ${velocity.toFixed(2)}`, 10, 50);
-      ctx.fillText(`Can Jump: ${velocity < VELOCITY_THRESHOLD ? 'Yes' : 'No'}`, 10, 75);
+      // ctx.fillText(`Velocity: ${velocity.toFixed(2)}`, 10, 50);
+      // ctx.fillText(`Can Jump: ${velocity < VELOCITY_THRESHOLD ? 'Yes' : 'No'}`, 10, 75);
     }
   });
 
