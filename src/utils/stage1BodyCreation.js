@@ -71,19 +71,19 @@ const createBodies = (width, height) => {
   const goal = Matter.Bodies.rectangle(width / 1.1, height * 0.59, 80, 50, {
     isStatic: true,
     isSensor: true,
-    render: { fillStyle: 'black' },
+    render: {
+      sprite: {
+        texture: '/img/oil.png',
+        xScale: 0.3,  // テクスチャのスケールを調整
+        yScale: 0.3
+      }
+    },
     label: 'goal'
   });
 
-  const bouncingBall = Matter.Bodies.circle(width / 3, height / 2, 30, {
-    restitution: 1,
-    friction: 0.001,
-    frictionAir: 0.001,
-    render: { fillStyle: 'orange' },
-    label: 'bouncingBall'
-  });
+  
 
-  return { player, ground, platform1, platform2, platform3, platform4, platform5, goal };
+  return { player, ground, platform1, platform2, platform3, platform5, goal };
 };
 
 export default createBodies;
