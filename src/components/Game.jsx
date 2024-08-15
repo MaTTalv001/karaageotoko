@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Matter from 'matter-js';
-import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ResetButton from './ResetButton';
 import Timer from './Timer';
 import KaraageStatement from './KaraageStatement';
+import GameCanvas from './Game/GameCanvas';
+import GameControls from './Game/GameControls';
+import StartModal from './Game/StartModal';
+import GoalModal from './Game/GoalModal';
 import { setupMatter } from '../utils/matterSetup';
-import { createBodies } from '../utils/bodyCreation';
 import { setupEventListeners } from '../utils/eventHandlers';
 import { INITIAL_PLAYER_POSITION } from '../constants/gameConfig';
 import useRankings from '../hooks/useRankings';
@@ -121,17 +123,18 @@ const Game = () => {
     setGameActive(true);
   }, []);
 
-useEffect(() => {
-  console.log('gameActive:', gameActive);
-}, [gameActive]);
+  useEffect(() => {
+    console.log('gameActive:', gameActive);
+  }, [gameActive]);
 
   const handleAddRanking = useCallback(() => {
-  const timeInSeconds = Math.floor(clearTime / 1000);
-  const name = playerName.trim() || 'guest';
-  addRanking(name, parseInt(stageId), timeInSeconds);
-  setPlayerName('');
-  setIsRecordSubmitted(true);
-}, [clearTime, addRanking, playerName, stageId]);
+    const timeInSeconds = Math.floor(clearTime / 1000);
+    const name = playerName.trim() || 'guest';
+    addRanking(name, parseInt(stageId), timeInSeconds);
+    setPlayerName('');
+    setIsRecordSubmitted(true);
+  }, [clearTime, addRanking, playerName, stageId]);
+
   const handleReset = useCallback(() => {
     if (!engineRef.current || !playerRef.current) return;
 
@@ -163,7 +166,6 @@ useEffect(() => {
 
     const cleanupEvents = setupEventListeners(sceneRef.current, render, bodies.player, engine, handleGoalAchieved, gameActive);
 
-
     return () => {
       cleanupEvents();
       if (resizeHandlerRef.current) {
@@ -193,106 +195,35 @@ useEffect(() => {
   };
 
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100vh',
-      backgroundColor: '#f0f0f0'
-    }}>
-      <div style={{
-        position: 'relative',
-        width: `${GAME_WIDTH}px`,
-        height: `${GAME_HEIGHT}px`,
-        overflow: 'hidden',
-        backgroundImage: 'url("/img/karaage_bg.jpg")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
-      }}>
-        <div ref={sceneRef} className="absolute inset-0" />
-  <Timer
-    isRunning={isTimerRunning}
-    onTimeUpdate={handleTimeUpdate}
-    resetTimeStamp={resetTimeStamp}
-    className="absolute top-2 right-2 z-50"
-  />
-  <div className="absolute top-2 left-2 z-50 flex flex-col gap-2">
-    <button
-      onClick={toggleMute}
-      className="btn btn-sm "
-    >
-      {isMuted ? '🔇 Silent' : '🔊 BGM'}
-    </button>
-    <ResetButton
-      onClick={handleReset}
-      className="btn btn-sm "
-    >
-      🔄 リトライ
-    </ResetButton>
-  </div>
-        
-        
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="relative w-[800px] h-[600px] overflow-hidden bg-cover bg-center" style={{backgroundImage: 'url("/img/karaage_bg.jpg")'}}>
+        <GameCanvas sceneRef={sceneRef} />
+        <Timer
+          isRunning={isTimerRunning}
+          onTimeUpdate={handleTimeUpdate}
+          resetTimeStamp={resetTimeStamp}
+          className="absolute top-2 right-2 z-50"
+        />
+        <GameControls
+          toggleMute={toggleMute}
+          isMuted={isMuted}
+          handleReset={handleReset}
+        />
         {isInitialInteraction && (
-  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70">
-    <div className="bg-base-200 p-8 rounded-lg shadow-xl text-center">
-      <p className="mb-6 text-base-content">
-                マウスで方向を決めクリックしてジャンプ!<br />
-                フライヤーを目指しましょう!
-      </p>
-      <button
-        onClick={handleInitialInteraction}
-        className="btn btn-primary btn-lg animate-pulse"
-      >
-        Fry!
-      </button>
-    </div>
-  </div>
-)}
+          <StartModal onStart={handleInitialInteraction} />
+        )}
         {showStatement && <KaraageStatement onComplete={handleStatementComplete} />}
         {goalAchieved && (
-  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-    <div className="bg-base-200 p-8 rounded-lg shadow-xl max-w-md w-full text-center">
-  <h2 className="text-5xl font-bold text-primary mb-6">ゴール！</h2>
-  <p className="text-2xl mb-6">
-    クリアタイム: <span className="font-bold">{formatTime(clearTime)}</span>
-  </p>
-  {!isRecordSubmitted && (
-    <input
-      type="text"
-      value={playerName}
-      onChange={(e) => setPlayerName(e.target.value)}
-      placeholder="プレイヤー名を入力"
-      className="input input-bordered w-full max-w-xs mb-4"
-    />
-  )}
-  <div className="mb-6">
-    {!isRecordSubmitted ? (
-      <button
-        onClick={handleAddRanking}
-        className="btn btn-primary w-full"
-      >
-        レコード登録
-      </button>
-    ) : (
-      <div className="text-success text-xl">
-        レコードが登録されました！
-      </div>
-    )}
-  </div>
-  <div className="flex justify-center gap-4">
-    <ResetButton
-      onClick={handleReset}
-      className="btn btn-secondary"
-    >
-      リトライ
-    </ResetButton>
-    <Link to="/" className="btn btn-accent">
-      ステージ選択
-    </Link>
-  </div>
-</div>
-  </div>
-)}
+          <GoalModal
+            clearTime={clearTime}
+            playerName={playerName}
+            setPlayerName={setPlayerName}
+            isRecordSubmitted={isRecordSubmitted}
+            handleAddRanking={handleAddRanking}
+            handleReset={handleReset}
+            formatTime={formatTime}
+          />
+        )}
       </div>
     </div>
   );
