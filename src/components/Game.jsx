@@ -195,35 +195,43 @@ const Game = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="relative w-[800px] h-[600px] overflow-hidden bg-cover bg-center" style={{backgroundImage: 'url("/img/karaage_bg.jpg")'}}>
-        <GameCanvas sceneRef={sceneRef} />
-        <Timer
-          isRunning={isTimerRunning}
-          onTimeUpdate={handleTimeUpdate}
-          resetTimeStamp={resetTimeStamp}
-          className="absolute top-2 right-2 z-50"
-        />
-        <GameControls
-          toggleMute={toggleMute}
-          isMuted={isMuted}
-          handleReset={handleReset}
-        />
-        {isInitialInteraction && (
-          <StartModal onStart={handleInitialInteraction} />
-        )}
-        {showStatement && <KaraageStatement onComplete={handleStatementComplete} />}
-        {goalAchieved && (
-          <GoalModal
-            clearTime={clearTime}
-            playerName={playerName}
-            setPlayerName={setPlayerName}
-            isRecordSubmitted={isRecordSubmitted}
-            handleAddRanking={handleAddRanking}
-            handleReset={handleReset}
-            formatTime={formatTime}
+    <div className="min-h-screen bg-gradient-to-b from-blue-400 to-purple-500 flex flex-col items-center justify-center p-4">
+      <div className="bg-white rounded-lg shadow-2xl p-6 w-full max-w-4xl">
+        <h1 className="text-3xl font-bold text-center mb-4 text-gray-800">からあげ様は揚げられたい</h1>
+        <div className="relative w-full aspect-[4/3] overflow-hidden rounded-lg shadow-inner bg-cover bg-center" style={{backgroundImage: 'url("/img/karaage_bg.jpg")'}}>
+          <GameCanvas sceneRef={sceneRef} />
+          <Timer
+            isRunning={isTimerRunning}
+            onTimeUpdate={handleTimeUpdate}
+            resetTimeStamp={resetTimeStamp}
+            className="absolute top-2 right-2 z-50 bg-white bg-opacity-70 rounded p-2"
           />
-        )}
+          <GameControls
+            toggleMute={toggleMute}
+            isMuted={isMuted}
+            handleReset={handleReset}
+          />
+          {isInitialInteraction && (
+            <StartModal onStart={handleInitialInteraction} />
+          )}
+          {showStatement && <KaraageStatement onComplete={handleStatementComplete} />}
+          {goalAchieved && (
+            <GoalModal
+              clearTime={clearTime}
+              playerName={playerName}
+              setPlayerName={setPlayerName}
+              isRecordSubmitted={isRecordSubmitted}
+              handleAddRanking={handleAddRanking}
+              handleReset={handleReset}
+              formatTime={formatTime}
+            />
+          )}
+        </div>
+        <div className="mt-4 text-center">
+          <Link to="/" className="text-blue-600 hover:text-blue-800 transition-colors duration-200">
+            ステージ選択に戻る
+          </Link>
+        </div>
       </div>
     </div>
   );

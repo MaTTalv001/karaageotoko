@@ -30,16 +30,17 @@ const StageSelect = () => {
   
 
   return (
-    <div className="min-h-screen bg-base-100 flex flex-col items-center">
+    <div className="min-h-screen bg-gradient-to-b from-blue-400 to-purple-800 flex flex-col items-center">
       <div className="hero min-h-[40vh] bg-base-200 relative" style={{backgroundImage: 'url(/img/karaage_title.jpg)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
     <div className="hero-overlay bg-opacity-60"></div>
     <div className="hero-content text-center text-neutral-content z-10">
       <div className="max-w-md bg-black bg-opacity-50 p-6 rounded-lg">
-        <h2 className="text-3xl font-bold text-center mb-4 text-white drop-shadow-lg">イントロダクション</h2>
+        <h2 className="text-2xl font-bold text-center mb-4 text-white drop-shadow-lg">イントロダクション</h2>
         <p className="text-center mb-6 text-white text-shadow">
-          マウスでジャンプ方向を決め、クリックでジャンプ！<br/>
-          障害物を避けながら油壺（フライヤー）を目指そう！<br/>
-          最高のタイムを記録して、二度揚げマイスターを目指せ！
+              からあげを操作して二度揚げの旅路を成就させます<br />
+              障害物を避けながら油鍋を目指そう！<br/>
+              マウス: 方向調整<br />
+              クリック: ジャンプ
         </p>
       </div>
     </div>
