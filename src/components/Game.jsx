@@ -162,7 +162,38 @@ const Game = () => {
 
     const bodies = bodyCreation(GAME_WIDTH, GAME_HEIGHT);
     playerRef.current = bodies.player;
-    Matter.World.add(world, Object.values(bodies));
+    //Matter.World.add(world, Object.values(bodies));
+
+    // 全てのボディをワールドに追加
+    Object.values(bodies).forEach(body => {
+      if (Array.isArray(body)) {
+        Matter.World.add(world, body);
+      } else if (body.type === 'composite') {
+        Matter.World.add(world, body);
+      } else {
+        Matter.World.add(world, [body]);
+      }
+    });
+
+    // 動く平台の動きを制御
+    // 動く平台の動きを制御
+    Matter.Events.on(engine, 'beforeUpdate', function() {
+      const time = engine.timing.timestamp;
+      
+      // 動く平台の制御
+      if (time > 1500) {
+        const px = GAME_WIDTH / 2 + 100 * Math.sin((time - 1500) * 0.002);
+        Matter.Body.setPosition(bodies.movingPlatform, {
+          x: px,
+          y: bodies.movingPlatform.position.y
+        }, true);
+      }
+
+      // 風車の回転
+      if (bodies.windmill && bodies.windmill.bodies) {
+        Matter.Body.rotate(bodies.windmill.bodies[1], 0.05);
+      }
+    });
 
     const cleanupEvents = setupEventListeners(sceneRef.current, render, bodies.player, engine, handleGoalAchieved, gameActive);
 

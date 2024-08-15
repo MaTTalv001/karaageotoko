@@ -9,8 +9,32 @@ import {
   PLATFORM_RESTITUTION
 } from '../constants/gameConfig';
 
+const createWindmill = (x, y, width, height) => {
+  const center = Matter.Bodies.circle(x, 1000, 10, { isStatic: true });
+  const blade = Matter.Bodies.rectangle(x, y - height/2, width, height, {
+    collisionFilter: { group: Matter.Body.nextGroup(true) },
+    render: { fillStyle: '#F3A712' }
+  });
+
+  const constraint = Matter.Constraint.create({
+    bodyA: center,
+    bodyB: blade,
+    pointA: { x: 0, y: 0 },
+    pointB: { x: 0, y: height/2 },
+    stiffness: 1,
+    length: 0
+  });
+
+  return Matter.Composite.create({
+    bodies: [center, blade],
+    constraints: [constraint],
+    label: 'windmill'
+  });
+};
+
+
 const createBodies = (width, height) => {
-  const player = Matter.Bodies.circle(100, height -20, 20, { 
+  const player = Matter.Bodies.circle(100, height - 50, 20, { 
     restitution: PLAYER_RESTITUTION,
     friction: PLAYER_FRICTION,
     frictionAir: PLAYER_FRICTION_AIR,
@@ -26,49 +50,49 @@ const createBodies = (width, height) => {
     label: 'player'
   });
 
-  const ground = Matter.Bodies.rectangle(width/2, height - 10, width, 20, { 
+  const ground = Matter.Bodies.rectangle(width / 2, height - 10, width, 20, { 
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'silver' }
   });
 
-  const platform1 = Matter.Bodies.rectangle(width / 3.3, height * 0.85, width / 5, 20, {
+  const platform1 = Matter.Bodies.rectangle(width / 3, height * 0.9, width / 5, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const platform2 = Matter.Bodies.rectangle(width / 1.8, height * 0.80, width / 5, 20, {
+  const platform2 = Matter.Bodies.rectangle(width / 1.8, height * 0.8, width / 5, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const platform3 = Matter.Bodies.rectangle(width / 1, height * 0.65, width / 1.6, 20, {
+  const platform3 = Matter.Bodies.rectangle(width / 1.3, height * 0.7, width / 6, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const platform4 = Matter.Bodies.rectangle(width / 1.2, height * 0.5, width / 9, 20, {
+  const platform4 = Matter.Bodies.rectangle(width / 1.0, height * 0.6, width / 5, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const platform5 = Matter.Bodies.rectangle(width / 0.99, height * 0.58, width / 10, 100, {
+  const platform5 = Matter.Bodies.rectangle(width / 1.0, height * 0.55, width / 15, 80, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const goal = Matter.Bodies.rectangle(width / 1.1, height * 0.59, 80, 50, {
+  const goal = Matter.Bodies.rectangle(width / 1.08, height * 0.53, 80, 50, {
     isStatic: true,
     isSensor: true,
     render: {
@@ -81,9 +105,26 @@ const createBodies = (width, height) => {
     label: 'goal'
   });
 
-  
+  const bouncingBall = Matter.Bodies.circle(width / 3, height / 2, 30, {
+    restitution: 1,
+    friction: 0.001,
+    frictionAir: 0.001,
+    render: { fillStyle: 'orange' },
+    label: 'bouncingBall'
+  });
 
-  return { player, ground, platform1, platform2, platform3, platform5, goal };
+  const movingPlatform = Matter.Bodies.rectangle(width, 1000, 200, 20, {
+    isStatic: true,
+    friction: PLATFORM_FRICTION,
+    restitution: PLATFORM_RESTITUTION,
+    render: { fillStyle: '#060a19' },
+    label: 'movingPlatform'
+  });
+
+  const windmill = createWindmill(3 * width / 4, height * 0.1, 20, 100);
+
+  return { player, ground, platform1, platform2, platform3, platform4,platform5, goal,
+    movingPlatform ,windmill};
 };
 
 export default createBodies;
