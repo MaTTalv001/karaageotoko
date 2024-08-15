@@ -60,8 +60,8 @@ const useRankings = () => {
 
       if (error) throw error;
 
-      console.log('Ranking added:', data);
-      await fetchRankings(); // Refetch all rankings after adding a new one
+      //console.log('Ranking added:', data);
+      await fetchRankings(); 
     } catch (error) {
       console.error('Error adding ranking:', error);
     }
