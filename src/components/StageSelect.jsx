@@ -2,25 +2,21 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import useRankings from '../hooks/useRankings';
 
-
 const StageSelect = () => {
-  const { stageRecords, loading, error } = useRankings();
+  const { topRecords, loading, error } = useRankings();
   const [isStoryExpanded, setIsStoryExpanded] = useState(false);
 
   const stages = [
-  { id: 1, name: 'Stage1:胎動', image: '/img/stage01.jpg' },
-  { id: 2, name: 'Stage2:邂逅', image: '/img/stage02.jpg' },
-  { id: 3, name: 'Stage3:混沌', image: '/img/stage03.jpg' },
-  { id: 4, name: 'Stage4:疾風', image: '/img/stage04.jpg' },
-  { id: 5, name: 'Stage5:残響', image: '/img/stage05.jpg' },
-  { id: 6, name: 'Stage6:断罪', image: '/img/stage06.jpg' },
-  { id: 7, name: 'Stage7:覚醒', image: '/img/stage07.jpg' },
-  { id: 8, name: 'Stage8:激闘', image: '/img/stage08.jpg' },
-  { id: 9, name: 'Stage9:暗影', image: '/img/stage09.jpg' },
-  { id: 10, name: 'Stage10:決意', image: '/img/stage10.jpg' },
-  { id: 11, name: 'Stage11:光芒', image: '/img/stage11.jpg' },
-  { id: 12, name: 'Stage12:輪廻', image: '/img/stage12.jpg' },
-];
+    { id: 1, name: 'Stage1:胎動', image: '/img/stage01.jpg' },
+    { id: 2, name: 'Stage2:邂逅', image: '/img/stage02.jpg' },
+    { id: 3, name: 'Stage3:混沌', image: '/img/stage03.jpg' },
+    { id: 4, name: 'Stage4:疾風', image: '/img/stage04.jpg' },
+    { id: 5, name: 'Stage5:残響', image: '/img/stage05.jpg' },
+    { id: 6, name: 'Stage6:断罪', image: '/img/stage06.jpg' },
+    { id: 7, name: 'Stage7:覚醒', image: '/img/stage07.jpg' },
+    { id: 8, name: 'Stage8:激闘', image: '/img/stage08.jpg' },
+    { id: 9, name: 'Stage9:暗影', image: '/img/stage09.jpg' },
+  ];
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -48,7 +44,6 @@ const StageSelect = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-
         <h2 className="text-3xl font-bold text-center mb-8 text-white">ステージセレクト</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {stages.map((stage) => (
@@ -60,10 +55,10 @@ const StageSelect = () => {
                   <p>Loading...</p>
                 ) : error ? (
                   <p>Error loading records</p>
-                ) : stageRecords[stage.id] ? (
+                ) : topRecords[stage.id] ? (
                   <p className="text-center">
-                    最速記録: {formatTime(stageRecords[stage.id].time)}<br />
-                    達成者: {stageRecords[stage.id].name}
+                    最速記録: {formatTime(topRecords[stage.id].time)}<br />
+                    達成者: {topRecords[stage.id].name}
                   </p>
                 ) : (
                   <p className="text-center">記録なし</p>

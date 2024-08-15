@@ -4,7 +4,7 @@ export const VELOCITY_THRESHOLD = 0.3; // この値以下の速度でのみジ�
 
 // 物理パラメータ
 export const WORLD_GRAVITY = 0.5; // 重力 (デフォルトは 0.001)
-export const PLAYER_FRICTION = 0.0001; // プレイヤーの摩擦
+export const PLAYER_FRICTION = 0.01; // プレイヤーの摩擦
 export const PLAYER_FRICTION_AIR = 0.01; // プレイヤーの空気抵抗
 export const PLAYER_FRICTION_STATIC = 0.01; // プレイヤーの静止摩擦
 export const PLAYER_RESTITUTION = 0.8; // プレイヤーの弾性（はねかえり）

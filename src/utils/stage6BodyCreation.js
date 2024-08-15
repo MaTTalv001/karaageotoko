@@ -57,35 +57,35 @@ const createBodies = (width, height) => {
     render: { fillStyle: 'silver' }
   });
 
-  const platform1 = Matter.Bodies.rectangle(width / 4, height * 0.85, width / 10, 20, {
+  const platform1 = Matter.Bodies.rectangle(width / 4, height *0.52, width / 10, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const platform2 = Matter.Bodies.rectangle(width / 2.2, height * 0.75, width / 7, 20, {
+  const platform2 = Matter.Bodies.rectangle(width / 2.2, height * 1000, width / 7, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const platform3 = Matter.Bodies.rectangle(width / 1.5, height * 0.6, width / 9, 20, {
+  const platform3 = Matter.Bodies.rectangle(width / 1.5, height * 1000, width / 9, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const platform4 = Matter.Bodies.rectangle(width / 1.2, height * 0.5, width / 9, 20, {
+  const platform4 = Matter.Bodies.rectangle(width / 1.2, height * 1000, width / 9, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const platform5 = Matter.Bodies.rectangle(width / 1.7, height * 0.4, width / 5, 20, {
+  const platform5 = Matter.Bodies.rectangle(width / 1.7, height * 1000, width / 5, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
@@ -113,7 +113,7 @@ const createBodies = (width, height) => {
     label: 'bouncingBall'
   });
 
-  const movingPlatform = Matter.Bodies.rectangle(width / 2, height * 0.9, 200, 20, {
+  const movingPlatform = Matter.Bodies.rectangle(width / 2, height * 1000, 200, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
@@ -122,9 +122,10 @@ const createBodies = (width, height) => {
   });
 
   const windmill = createWindmill(3 * width / 4, height * 0.1, 20, 100);
+  const windmill2 = createWindmill(3 * width / 4, height * 0.8, 20, 100);
 
   return { player, ground, platform1, platform2, platform3, platform4, platform5, goal,
-    movingPlatform ,windmill};
+    movingPlatform ,windmill,windmill2};
 };
 
 export default createBodies;
