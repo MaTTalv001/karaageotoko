@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import useRankings from '../hooks/useRankings';
 
 
 const StageSelect = () => {
   const { stageRecords, loading, error } = useRankings();
+  const [isStoryExpanded, setIsStoryExpanded] = useState(false);
 
   const stages = [
   { id: 1, name: 'Stage1:胎動', image: '/img/stage01.jpg' },
@@ -31,25 +32,24 @@ const StageSelect = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-400 to-purple-800 flex flex-col items-center">
-      <div className="hero min-h-[40vh] bg-base-200 relative" style={{backgroundImage: 'url(/img/karaage_title.jpg)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
-    <div className="hero-overlay bg-opacity-60"></div>
-    <div className="hero-content text-center text-neutral-content z-10">
-      <div className="max-w-md bg-black bg-opacity-50 p-6 rounded-lg">
-        <h2 className="text-2xl font-bold text-center mb-4 text-white drop-shadow-lg">イントロダクション</h2>
-        <p className="text-center mb-6 text-white text-shadow">
+      <div className="hero min-h-[40vh] bg-base-200 relative w-full" style={{ backgroundImage: 'url(/img/karaage_title.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <div className="hero-overlay bg-opacity-60"></div>
+        <div className="hero-content text-center text-neutral-content z-10">
+          <div className="max-w-md bg-black bg-opacity-50 p-6 rounded-lg">
+            <h2 className="text-2xl font-bold text-center mb-4 text-white drop-shadow-lg">イントロダクション</h2>
+            <p className="text-center mb-6 text-white text-shadow">
               からあげを操作して二度揚げの旅路を成就させます<br />
               障害物を避けながら油鍋を目指そう！<br/>
               マウス: 方向調整<br />
               クリック: ジャンプ
-        </p>
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
       <div className="container mx-auto px-4 py-8">
-        
 
-        <h2 className="text-3xl font-bold text-center mb-8">ステージセレクト</h2>
+        <h2 className="text-3xl font-bold text-center mb-8 text-white">ステージセレクト</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {stages.map((stage) => (
             <Link key={stage.id} to={`/stage/${stage.id}`} className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">

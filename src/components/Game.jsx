@@ -196,10 +196,10 @@ const Game = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-400 to-purple-500 flex flex-col items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-2xl p-6 w-full max-w-4xl">
+      <div className="bg-white rounded-lg shadow-2xl p-6 w-[832px]">
         <h1 className="text-3xl font-bold text-center mb-4 text-gray-800">からあげ様は揚げられたい</h1>
-        <div className="relative w-full aspect-[4/3] overflow-hidden rounded-lg shadow-inner bg-cover bg-center" style={{backgroundImage: 'url("/img/karaage_bg.jpg")'}}>
-          <GameCanvas sceneRef={sceneRef} />
+        <div className="relative w-[800px] h-[600px] overflow-hidden rounded-lg shadow-inner mx-auto" style={{backgroundImage: 'url("/img/karaage_bg.jpg")', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+          <GameCanvas sceneRef={sceneRef} width={GAME_WIDTH} height={GAME_HEIGHT} />
           <Timer
             isRunning={isTimerRunning}
             onTimeUpdate={handleTimeUpdate}
