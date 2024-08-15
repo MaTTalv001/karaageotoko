@@ -26,28 +26,28 @@ const createBodies = (width, height) => {
     label: 'player'
   });
 
-  const ground = Matter.Bodies.rectangle(width / 2, height - 10, width, 20, { 
+  const ground = Matter.Bodies.rectangle(width/2, height - 10, width, 20, { 
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'silver' }
   });
 
-  const platform1 = Matter.Bodies.rectangle(width / 3.5, height * 0.85, width / 6, 20, {
+  const platform1 = Matter.Bodies.rectangle(width / 3.3, height * 0.85, width / 5, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const platform2 = Matter.Bodies.rectangle(width / 1.8, height * 0.75, width / 5, 20, {
+  const platform2 = Matter.Bodies.rectangle(width / 1.8, height * 0.80, width / 5, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
     render: { fillStyle: 'white' }
   });
 
-  const platform3 = Matter.Bodies.rectangle(width / 1, height * 0.65, width / 2, 20, {
+  const platform3 = Matter.Bodies.rectangle(width / 1, height * 0.65, width / 1.6, 20, {
     isStatic: true,
     friction: PLATFORM_FRICTION,
     restitution: PLATFORM_RESTITUTION,
