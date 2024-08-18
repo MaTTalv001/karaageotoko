@@ -231,7 +231,7 @@ const Game = () => {
   };
 
   const handleTweet = useCallback(() => {
-    const tweetText = `【からあげ様は揚げられたい】ステージ${stageId}を${formatTime(clearTime)}でクリアしました！ #からあげ様 #RUNTEQ祭 @RckLVnPtRv61824`;
+    const tweetText = `【からあげ様は揚げられたい】ステージ${stageId}を${formatTime(clearTime)}でクリアしました！ #からあげ様 #RUNTEQ祭`;
     const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
       "https://karaageotoko.vercel.app/"
     )}&text=${encodeURIComponent(tweetText)}`;
