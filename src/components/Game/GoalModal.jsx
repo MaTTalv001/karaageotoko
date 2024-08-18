@@ -28,7 +28,7 @@ const GoalModal = ({
             className="input input-bordered w-full max-w-xs mb-4"
           />
         )}
-        <div className="mb-6">
+        <div className="mb-4">
           {!isRecordSubmitted ? (
             <button
               onClick={handleAddRanking}
@@ -42,7 +42,15 @@ const GoalModal = ({
             </div>
           )}
         </div>
-        <div className="flex justify-center gap-4 mb-4">
+        <div className="flex justify-center gap-4 mb-2">
+        <button
+          onClick={handleTweet}
+          className="btn btn-info w-full"
+        >
+          Twitterで共有
+          </button>
+        </div>
+        <div className="flex justify-center gap-4 mb-2">
           <ResetButton
             onClick={handleReset}
             className="btn btn-secondary"
@@ -53,12 +61,7 @@ const GoalModal = ({
             ステージ選択
           </Link>
         </div>
-        <button
-          onClick={handleTweet}
-          className="btn btn-info w-full"
-        >
-          Twitterで共有
-        </button>
+        
       </div>
     </div>
   );
