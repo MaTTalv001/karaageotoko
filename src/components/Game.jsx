@@ -225,6 +225,20 @@ const Game = () => {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds}`;
   };
 
+  const post = {
+    title: "からあげ様は揚げられたい",
+    url: "https://karaageotoko.vercel.app/",
+  };
+
+  const handleTweet = useCallback(() => {
+    const tweetText = `【からあげ様は揚げられたい】ステージ${stageId}を${formatTime(clearTime)}でクリアしました！ #からあげ様 #RUNTEQ祭 @RckLVnPtRv61824`;
+    const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+      "https://karaageotoko.vercel.app/"
+    )}&text=${encodeURIComponent(tweetText)}`;
+
+    window.open(twitterUrl, "_blank");
+  }, [stageId, clearTime]);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-400 to-purple-500 flex flex-col items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-2xl p-6 w-[832px]">
@@ -255,6 +269,7 @@ const Game = () => {
               handleAddRanking={handleAddRanking}
               handleReset={handleReset}
               formatTime={formatTime}
+              handleTweet={handleTweet}
             />
           )}
         </div>

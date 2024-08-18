@@ -2,14 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import ResetButton from '../ResetButton';
 
-const GoalModal = ({ clearTime, playerName, setPlayerName, isRecordSubmitted, handleAddRanking, handleReset }) => {
-  const formatTime = (ms) => {
-    const minutes = Math.floor(ms / 60000);
-    const seconds = Math.floor((ms % 60000) / 1000);
-    const milliseconds = Math.floor((ms % 1000) / 100);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds}`;
-  };
-
+const GoalModal = ({ 
+  clearTime, 
+  playerName, 
+  setPlayerName, 
+  isRecordSubmitted, 
+  handleAddRanking, 
+  handleReset, 
+  formatTime,
+  handleTweet 
+}) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="bg-base-200 p-8 rounded-lg shadow-xl max-w-md w-full text-center">
@@ -40,7 +42,7 @@ const GoalModal = ({ clearTime, playerName, setPlayerName, isRecordSubmitted, ha
             </div>
           )}
         </div>
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center gap-4 mb-4">
           <ResetButton
             onClick={handleReset}
             className="btn btn-secondary"
@@ -51,6 +53,12 @@ const GoalModal = ({ clearTime, playerName, setPlayerName, isRecordSubmitted, ha
             ステージ選択
           </Link>
         </div>
+        <button
+          onClick={handleTweet}
+          className="btn btn-info w-full"
+        >
+          Twitterで共有
+        </button>
       </div>
     </div>
   );
